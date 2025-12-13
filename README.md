@@ -29,7 +29,6 @@ Reactなど多数のフレームワークに対応しています。
 1. リポジトリをクローン  
    ```bash
    git clone https://github.com/omegalfacode/react-apexcharts-sample.git
-   cd your-repo-name
    ```
 
 2. 依存パッケージをインストール
