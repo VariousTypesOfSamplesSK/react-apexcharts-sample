@@ -1,7 +1,8 @@
 # 📊 Next.js × React-ApexCharts × Storybook サンプル
 
-このリポジトリは、**Next.js** で **react-apexcharts**（チャート作成用ライブラリ）を使って作成したグラフを、**Storybook** 上で確認できるサンプルです。  
-React-ApexCharts や Storybook の利用方法・基本設定を学ぶのに最適な構成になっています。
+このリポジトリは、**Next.js** で **react-apexcharts**（チャート作成用ライブラリ）を使って作成したグラフを、**Storybook** 上で確認できる
+超基礎的なサンプルです。  
+今後も時間の合間を縫って更新してブラッシュアップしていこうと思います。
 
 ---
 
