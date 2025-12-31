@@ -1,50 +1,12 @@
 import React from "react";
 import Chart from "react-apexcharts";
-import { addDays, format } from "date-fns";
-
-type SampleType = 10 | 20 | 30;
-
-// サンプルデータ生成関数
-const generateSampleData = (days: SampleType) => {
-  const today = new Date();
-  const dates = Array.from({ length: days }, (_, i) => addDays(today, i));
-
-  const dataA: number[] = [];
-  const dataB: number[] = [];
-  const dataC: number[] = [];
-
-  for (let i = 0; i < days; i++) {
-    const maxTotal = 50;
-
-    const a = Math.floor(Math.random() * (maxTotal + 1)); // 0〜50
-    const b = Math.floor(Math.random() * (maxTotal - a + 1)); // 0〜(50-A)
-    const c = Math.floor(Math.random() * (maxTotal - a - b + 1)); // 0〜(50-A-B)
-
-    dataA.push(a);
-    dataB.push(b);
-    dataC.push(c);
-  }
-
-  return {
-    dates,
-    series: [
-      { name: "A", data: dataA },
-      { name: "B", data: dataB },
-      { name: "C", data: dataC },
-    ],
-  };
-};
-
-// 横軸ラベル間隔設定
-const getTickAmount = (days: number) => {
-  if (days >= 25) return 5;
-  if (days >= 20) return 4;
-  if (days >= 10) return 3;
-  return 1;
-};
+import { format } from "date-fns";
+import { SampleType, useApplyBarGraphData } from "./useApplyBarGraphData";
 
 export const BarGraph = ({ days }: { days: SampleType }) => {
-  const { dates, series } = generateSampleData(days);
+  const { generateSampleData, getTickAmount } = useApplyBarGraphData(days);
+
+  const { dates, series } = generateSampleData();
 
   // グラフのオプションを設定できます。
   const options: ApexCharts.ApexOptions = {
@@ -95,7 +57,7 @@ export const BarGraph = ({ days }: { days: SampleType }) => {
       //横軸の配列
       categories: dates.map((d) => format(d, "MM月dd日")),
       //間隔
-      tickAmount: getTickAmount(days),
+      tickAmount: getTickAmount(),
       //ラベルのカスタマイズ
       labels: {
         rotate: 0, // ラベルを横向きに固定
@@ -117,11 +79,19 @@ export const BarGraph = ({ days }: { days: SampleType }) => {
     },
     // 注釈を指定できます。特定のところにラベルを付けるとかも可能です。
     annotations: {
-      xaxis: [
+      yaxis: [
         {
-          x: 0, // 一番左の縦線
-          borderColor: "#000000",
+          y: 45,
+          borderColor: "#ff0000ff",
           strokeDashArray: 0,
+          label: {
+            text: "キケン！",
+            borderColor: "transparent",
+            style: {
+              color: "#ff0000ff",
+              background: "transparent",
+            },
+          },
         },
       ],
     },
@@ -140,8 +110,8 @@ export const BarGraph = ({ days }: { days: SampleType }) => {
         return `
         <div style="padding: 8px; font-size: 14px;">
           <div><strong>${format(date, "yyyy年MM月dd日")}</strong></div>
-          <div style="color:#FFC0CB;">C: ${C}</div>
-          <div style="color:#FFA500;">B: ${B}</div>
+          <div style="color:#FFC0CB;">C: ${C + B + A}</div>
+          <div style="color:#FFA500;">B: ${B + A}</div>
           <div style="color:#FF0000;">A: ${A}</div>
         </div>
       `;
@@ -149,12 +119,5 @@ export const BarGraph = ({ days }: { days: SampleType }) => {
     },
   };
 
-  // グラフに入れるデータになります。
-  const seriesStacked = [
-    { name: "C", data: series[2].data },
-    { name: "B", data: series[1].data },
-    { name: "A", data: series[0].data },
-  ];
-
-  return <Chart options={options} series={seriesStacked} type="bar" height={400} />;
+  return <Chart options={options} series={series} type="bar" height={400} />;
 };
