@@ -1,6 +1,3 @@
-// 必要パッケージ
-// npm install apexcharts react-apexcharts date-fns
-
 import React from "react";
 import Chart from "react-apexcharts";
 import { addDays, format } from "date-fns";
@@ -46,46 +43,42 @@ const getTickAmount = (days: number) => {
   return 1;
 };
 
-interface Props {
-  days: SampleType;
-}
-
-const StackedBarChart: React.FC<Props> = ({ days }) => {
+export const BarGraph = ({ days }: { days: SampleType }) => {
   const { dates, series } = generateSampleData(days);
 
+  // グラフのオプションを設定できます。
   const options: ApexCharts.ApexOptions = {
+    // グラフのタイプを決められます。今回は積み上げ縦棒グラフのためtypeはbar、stackedはtrueにしています。
     chart: {
       type: "bar",
       stacked: true,
-      toolbar: { show: false },
     },
+    // 棒に対するオプションになります。今回は上下反転はなし、幅は50%になります。
     plotOptions: {
       bar: {
         horizontal: false,
         columnWidth: "50%",
-        dataLabels: {
-          hideOverflowingLabels: true,
-        },
       },
     },
+    //棒の中に数値を表示するか否かの設定ができます。今回は非表示です。
     dataLabels: {
-      enabled: false, // ← これで棒内の値を非表示
+      enabled: false,
     },
+    // マウスオーバーしたときの挙動を設定します。
     states: {
       hover: {
         filter: {
-          type: "none", // ← hover時の強調を無効化
+          type: "none",
         },
       },
     },
+    // 罫線についての設定です。
     grid: {
+      // 罫線の色
       borderColor: "#000000", // 罫線を黒に
-      row: {
-        colors: ["#f3f3f3", "transparent"],
-        opacity: 0.5,
-      },
+      // 横軸の罫線の表示
       xaxis: {
-        lines: { show: true }, // 横軸の縦線を有効化
+        lines: { show: true },
       },
     },
     // 横軸に関する設定が可能です
@@ -94,15 +87,16 @@ const StackedBarChart: React.FC<Props> = ({ days }) => {
       max: 50,
       // 縦軸の最小値
       min: 0,
-      // 幅
+      // 間隔
       tickAmount: 5,
-      // タイトル
-      // title: { text: "数値" },
     },
     // 横軸に関する設定です
     xaxis: {
+      //横軸の配列
       categories: dates.map((d) => format(d, "MM月dd日")),
+      //間隔
       tickAmount: getTickAmount(days),
+      //ラベルのカスタマイズ
       labels: {
         rotate: 0, // ラベルを横向きに固定
         offsetX: 15,
@@ -113,11 +107,15 @@ const StackedBarChart: React.FC<Props> = ({ days }) => {
         style: { fontSize: "12px" },
       },
     },
-    colors: ["#FF0000", "#FFA500", "#FFC0CB"], // A:赤、B:橙、C:ピンク
+    // 棒の色を指定A:赤、B:橙、C:ピンク
+    colors: ["#FF0000", "#FFA500", "#FFC0CB"],
+    // 凡例の設定
     legend: {
-      position: "top",
+      position: "left",
+      horizontalAlign: "center",
+      fontSize: "14px",
     },
-    // 注釈を指定できます。ここで特定のところにだけラベルを付けるとかも可能です。
+    // 注釈を指定できます。特定のところにラベルを付けるとかも可能です。
     annotations: {
       xaxis: [
         {
@@ -132,7 +130,7 @@ const StackedBarChart: React.FC<Props> = ({ days }) => {
       shared: true,
       intersect: false,
       followCursor: true,
-      custom: ({ series, seriesIndex, dataPointIndex, w }) => {
+      custom: ({ series, dataPointIndex }) => {
         // こんな感じでグラフ外のデータも利用できます。
         const date = dates[dataPointIndex];
         const A = series[0][dataPointIndex]; // 下からA
@@ -151,7 +149,7 @@ const StackedBarChart: React.FC<Props> = ({ days }) => {
     },
   };
 
-  // 積み上げ順を下からA→B→Cに
+  // グラフに入れるデータになります。
   const seriesStacked = [
     { name: "C", data: series[2].data },
     { name: "B", data: series[1].data },
@@ -159,20 +157,4 @@ const StackedBarChart: React.FC<Props> = ({ days }) => {
   ];
 
   return <Chart options={options} series={seriesStacked} type="bar" height={400} />;
-};
-
-// 使用例
-export const BarGraph = () => {
-  return (
-    <div>
-      <h2>30日サンプル</h2>
-      <StackedBarChart days={30} />
-
-      <h2>20日サンプル</h2>
-      <StackedBarChart days={20} />
-
-      <h2>10日サンプル</h2>
-      <StackedBarChart days={10} />
-    </div>
-  );
 };

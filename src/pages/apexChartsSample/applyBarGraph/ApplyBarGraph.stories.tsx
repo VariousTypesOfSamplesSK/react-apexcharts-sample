@@ -14,23 +14,13 @@ export default meta;
 type Story = StoryObj<typeof BarGraph>;
 
 export const Default: Story = {
-  args: {},
+  args: { days: 10 },
 };
 
-export const LineChart: Story = {
-  args: {
-    title: "Line Chart Example",
-    categories: ["TEAM A", "TEAM B", "TEAM C", "TEAM D"],
-    data: [
-      {
-        x: "TEAM A",
-        y: [1358447400000, 1358620200000],
-      },
-      {
-        x: "TEAM B",
-        y: [1358447400000, 1358620200000],
-      },
-    ],
-    width: "600",
-  },
+export const Twenty: Story = {
+  args: { days: 20 },
+};
+
+export const tirty: Story = {
+  args: { days: 30 },
 };
