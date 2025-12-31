@@ -22,6 +22,8 @@ export default [
 
       // React
       "react/react-in-jsx-scope": "off", // Next.js では不要
+
+      "spaced-comment": ["error", "always", { markers: ["/"], exceptions: ["-", "+"] }],
     },
   },
 
