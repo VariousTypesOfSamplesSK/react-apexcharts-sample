@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { Chart } from './Chart';
 
 const meta: Meta<typeof Chart> = {
-  title: 'apexChartsSample\Elementary\Chart',
+  title: 'apexChartsSample/ElementaryChart',
   component: Chart,
   tags: ['autodocs'],
 };

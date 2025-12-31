@@ -1,25 +1,30 @@
-// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
-import storybook from "eslint-plugin-storybook";
+// eslint.config.mjs
+import js from "@eslint/js";
+import tseslint from "typescript-eslint";
+import react from "eslint-plugin-react";
+import prettierPlugin from "eslint-plugin-prettier";
+import eslintConfigPrettier from "eslint-config-prettier";
 
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+export default [
+  js.configs.recommended,
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+  ...tseslint.configs.recommended,
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
+  {
+    files: ["**/*.{ts,tsx}"],
+    plugins: {
+      react,
+      prettier: prettierPlugin,
+    },
+    rules: {
+      // Prettier を ESLint 経由で実行
+      "prettier/prettier": "error",
 
-const eslintConfig = [...compat.extends("next/core-web-vitals", "next/typescript"), {
-  ignores: [
-    "node_modules/**",
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
-  ],
-}, ...storybook.configs["flat/recommended"]];
+      // React
+      "react/react-in-jsx-scope": "off", // Next.js では不要
+    },
+  },
 
-export default eslintConfig;
+  // Prettier と競合するルールを無効化
+  eslintConfigPrettier,
+];
