@@ -1,6 +1,6 @@
 // pages/index.tsx
-import { Chart } from '../components/Chart';
-import { sampleChartProps } from '@/components/sampleChartData';
+import { Chart } from './apexChartsSample/Elementary/Chart';
+import { sampleChartProps } from '@/pages/apexChartsSample/Elementary/sampleChartData';
 
 const Home = () => {
   return (
